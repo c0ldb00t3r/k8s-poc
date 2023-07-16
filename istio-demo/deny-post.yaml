@@ -1,0 +1,16 @@
+kubectl apply -f - <<EOF
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-post
+  namespace: test
+spec:
+  selector:
+    matchLabels:
+      app: simple-upload
+  action: DENY
+  rules:
+  - to:
+    - operation:
+        methods: ["GET"]
+EOF
