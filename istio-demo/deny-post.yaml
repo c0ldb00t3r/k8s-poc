@@ -12,5 +12,5 @@ spec:
   rules:
   - to:
     - operation:
-        methods: ["GET"]
+        methods: ["POST"]
 EOF
