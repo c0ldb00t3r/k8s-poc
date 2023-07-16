@@ -1,0 +1,9 @@
+for from in "secured" "lax" "legacy"; do for to in "secured" "lax"; do kubectl exec "$(kubectl get pod -l app=b -n ${from} -o jsonpath={.items..metadata.name})" -c b -n ${from} -- curl http://a.${to}:8000/ip -s -o /dev/null -w "b.${from} to a.${to}: %{http_code}\n"; done; done
+
+
+kubectl exec -nsecured "$(kubectl get pod -nsecured -lapp=a -ojsonpath={.items..metadata.name})" -c istio-proxy -- sudo tcpdump dst port 80  -A
+
+curl -i -s -k  -X $'POST' \
+    -H $'Host: upload-service.test.svc.cluster.local:5000'  -H $'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8' -H $'Content-Type: multipart/form-data; boundary=---------------------------42141469602735929271904839425' \
+    --data-binary $'-----------------------------42141469602735929271904839425\x0d\x0aContent-Disposition: form-data; name=\"file\"; filename=\"xss.txt\"\x0d\x0aContent-Type: text/plain\x0d\x0a\x0d\x0a<img src=x onerror=prompt(3);>\x0d\x0a-----------------------------42141469602735929271904839425--\x0d\x0a' \
+    $'http://upload-service.test.svc.cluster.local:5000/'
