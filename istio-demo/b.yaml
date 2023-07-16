@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: b
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: b
+  labels:
+    app: b
+    service: b
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: b
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: b
+  template:
+    metadata:
+      labels:
+        app: b
+    spec:
+      terminationGracePeriodSeconds: 0
+      serviceAccountName: b
+      containers:
+      - name: b
+        image: curlimages/curl
+        command: ["/bin/sleep", "infinity"]
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /etc/sleep/tls
+          name: secret-volume
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: b-secret
+          optional: true
