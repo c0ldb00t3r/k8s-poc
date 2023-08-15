@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: simple-upload
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  name: upload-service
+  namespace: test
+spec:
+  selector:
+    app: simple-upload
+  ports:
+  - protocol: TCP
+    port: 5000
+    nodePort: 32346
+  type: NodePort
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-upload-deployment
+  namespace: test
+spec:
+  selector:
+    matchLabels:
+      app: simple-upload
+  template:
+    metadata:
+      name: simple-upload-app
+      labels:
+        app: simple-upload
+    spec:
+      serviceAccountName: simple-upload
+      containers:
+      - name: simple-upload
+        image: c0ld/simple-upload:latest
+        ports:
+              - containerPort: 5000
