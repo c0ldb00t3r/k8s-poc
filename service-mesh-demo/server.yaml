@@ -1,0 +1,13 @@
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  namespace: test
+  name: simple-upload
+  labels:
+    app: simple-upload
+spec:
+  podSelector:
+    matchLabels:
+      app: simple-upload
+  port: 5000
+  proxyProtocol: HTTP/1
