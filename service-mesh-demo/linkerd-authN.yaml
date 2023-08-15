@@ -1,0 +1,10 @@
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: authN
+  namespace: test
+spec:
+  identityRefs:
+    - kind: ServiceAccount
+      name: b
+      namespace: secured 
