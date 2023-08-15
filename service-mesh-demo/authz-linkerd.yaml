@@ -1,0 +1,14 @@
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: authz
+  namespace: test
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: simple-upload
+  requiredAuthenticationRefs:
+    - name: b
+      kind: ServiceAccount
+      namespace: secured
