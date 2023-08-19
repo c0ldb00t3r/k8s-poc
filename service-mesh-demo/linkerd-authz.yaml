@@ -11,4 +11,4 @@ spec:
   requiredAuthenticationRefs:
     - name: b
       kind: ServiceAccount
-      namespace: b
+      namespace: secured
